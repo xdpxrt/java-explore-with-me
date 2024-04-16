@@ -4,25 +4,29 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>ru.practicum</groupId>
-        <artifactId>explore-with-me</artifactId>
+        <groupId>ru.yandex.practicum</groupId>
+        <artifactId>stats-service</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>ru.yandex.practicum</groupId>
-    <artifactId>stats-service</artifactId>
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>stats-client</module>
-        <module>stats-dto</module>
-        <module>stats-server</module>
-    </modules>
+    <artifactId>stats-dto</artifactId>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>
