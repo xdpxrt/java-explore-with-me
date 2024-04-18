@@ -1,16 +1,16 @@
 package ru.yandex.practicum.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
-@Builder
+
 @Entity
+@Getter
+@Setter
+@Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "stats")

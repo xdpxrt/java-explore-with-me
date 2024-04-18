@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.yandex.practicum.EndpointHit;
-import ru.yandex.practicum.ViewStats;
+import ru.yandex.practicum.dto.EndpointHit;
+import ru.yandex.practicum.dto.ViewStats;
 import ru.yandex.practicum.mapper.StatMapper;
 import ru.yandex.practicum.model.Stat;
 import ru.yandex.practicum.repository.StatsRepository;
@@ -31,7 +31,6 @@ public class StatsServiceImpl implements StatsService {
     @Override
     @Transactional(readOnly = true)
     public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
-        List<ViewStats> list;
         if (uris == null) {
             if (unique) {
                 log.info("getStats uris empty, unique = true");

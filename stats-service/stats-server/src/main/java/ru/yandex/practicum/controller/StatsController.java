@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.EndpointHit;
-import ru.yandex.practicum.ViewStats;
+import ru.yandex.practicum.dto.EndpointHit;
+import ru.yandex.practicum.dto.ViewStats;
 import ru.yandex.practicum.error.exceptions.ValidationException;
 import ru.yandex.practicum.service.StatsService;
 
