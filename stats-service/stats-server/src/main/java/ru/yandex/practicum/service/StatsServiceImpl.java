@@ -31,7 +31,7 @@ public class StatsServiceImpl implements StatsService {
     @Override
     @Transactional(readOnly = true)
     public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
-        if (uris == null) {
+        if (uris.isEmpty()) {
             if (unique) {
                 log.info("getStats uris empty, unique = true");
                 return statsRepository.findAllStatsUniqueIp(start, end);
