@@ -19,7 +19,7 @@ public class NewEventDTO {
     @Size(min = 20, max = 2000)
     private String annotation;
     @NotNull
-    private int category;
+    private Long category;
     @NotBlank
     @Size(min = 20, max = 7000)
     private String description;
@@ -27,13 +27,13 @@ public class NewEventDTO {
     @NotNull
     @JsonFormat(pattern = DATE_FORMAT)
     private LocalDateTime eventDate;
-    @NotNull
     @Valid
-    private LocationDTO locationDTO;
+    @NotNull
+    private LocationDTO location;
     @NotNull
     private Boolean paid;
     @PositiveOrZero
-    private int participantLimit;
+    private Long participantLimit;
     @NotNull
     private Boolean requestModeration;
     @NotBlank

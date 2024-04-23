@@ -2,7 +2,7 @@ package ru.yandex.practicum.request.model;
 
 import lombok.*;
 import ru.yandex.practicum.event.model.Event;
-import ru.yandex.practicum.request.status.Status;
+import ru.yandex.practicum.request.status.RequestStatus;
 import ru.yandex.practicum.user.model.User;
 
 import javax.persistence.*;
@@ -34,5 +34,5 @@ public class Request {
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private RequestStatus status;
 }

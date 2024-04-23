@@ -1,9 +1,6 @@
 package ru.yandex.practicum.event.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import ru.yandex.practicum.category.model.Category;
 import ru.yandex.practicum.event.location.model.Location;
 import ru.yandex.practicum.event.state.EventState;
@@ -15,6 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "events")
@@ -44,7 +42,7 @@ public class Event {
     private Boolean paid;
 
     @Column(name = "participant_limit", nullable = false)
-    private int participantLimit;
+    private Long participantLimit;
 
     @Column(name = "request_moderation", nullable = false)
     private Boolean requestModeration;
@@ -55,7 +53,7 @@ public class Event {
     @Column(name = "created_on")
     private LocalDateTime createdOn;
 
-    @Column(name = "published_on", nullable = false)
+    @Column(name = "published_on")
     private LocalDateTime publishedOn;
 
     @JoinColumn(name = "initiator_id")
@@ -64,4 +62,10 @@ public class Event {
 
     @Column(name = "event_state")
     private EventState state;
+
+    @Transient
+    private Long views;
+
+    @Transient
+    private Long confirmedRequests;
 }

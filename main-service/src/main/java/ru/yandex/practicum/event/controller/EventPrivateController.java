@@ -49,8 +49,8 @@ public class EventPrivateController {
 
     @GetMapping
     public List<FullEventDTO> getAllEvents(@PathVariable @Positive Long userId,
-                                           @RequestParam @PositiveOrZero int from,
-                                           @RequestParam @Positive int size) {
+                                           @RequestParam(defaultValue = "0") @PositiveOrZero int from,
+                                           @RequestParam(defaultValue = "10") @Positive int size) {
         log.info("Response from GET request on {}", EVENTS_PRIVATE_URI);
         return eventService.getAllEvents(userId, FromSizePage(from, size));
     }

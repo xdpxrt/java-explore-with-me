@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.user.dto.NewUserRequest;
+import ru.yandex.practicum.user.dto.NewUserDTO;
 import ru.yandex.practicum.user.dto.UserDTO;
 import ru.yandex.practicum.user.service.UserService;
 
@@ -27,9 +27,9 @@ public class UserAdminController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO addUser(@RequestBody @Valid NewUserRequest newUserRequest) {
+    public UserDTO addUser(@RequestBody @Valid NewUserDTO newUserDTO) {
         log.info("Response from POST request on {}", USERS_ADMIN_URI);
-        return userService.addUser(newUserRequest);
+        return userService.addUser(newUserDTO);
     }
 
     @DeleteMapping("/{userId}")

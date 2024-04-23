@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.yandex.practicum.request.status.Status;
+import ru.yandex.practicum.request.status.RequestStatus;
 
 import java.time.LocalDateTime;
 
@@ -17,5 +17,5 @@ public class RequestDTO {
     private Long event;
     private Long id;
     private Long requester;
-    private Status status;
+    private RequestStatus requestStatus;
 }

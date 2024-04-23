@@ -18,17 +18,17 @@ import static ru.yandex.practicum.util.Constants.DATE_FORMAT;
 public class UpdateEventDTO {
     @Size(min = 20, max = 2000)
     private String annotation;
-    private int category;
+    private Long category;
     @Size(min = 20, max = 7000)
     private String description;
     @Future
     @JsonFormat(pattern = DATE_FORMAT)
     private LocalDateTime eventDate;
     @Valid
-    private LocationDTO locationDTO;
+    private LocationDTO location;
     private Boolean paid;
     @PositiveOrZero
-    private int participantLimit;
+    private Long participantLimit;
     private Boolean requestModeration;
     private StateAction stateAction;
     @Size(min = 3, max = 120)

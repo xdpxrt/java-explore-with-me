@@ -6,13 +6,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.error.exception.NotFoundException;
-import ru.yandex.practicum.user.dto.NewUserRequest;
+import ru.yandex.practicum.user.dto.NewUserDTO;
 import ru.yandex.practicum.user.dto.UserDTO;
 import ru.yandex.practicum.user.mapper.UserMapper;
 import ru.yandex.practicum.user.model.User;
 import ru.yandex.practicum.user.repository.UserRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static ru.yandex.practicum.util.Constants.USER_NOT_FOUND;
@@ -26,9 +25,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDTO addUser(NewUserRequest newUserRequest) {
-        log.info("Adding user {}", newUserRequest);
-        User user = userRepository.save(userMapper.toUser(newUserRequest));
+    public UserDTO addUser(NewUserDTO newUserDTO) {
+        log.info("Adding user {}", newUserDTO);
+        User user = userRepository.save(userMapper.toUser(newUserDTO));
         log.info("User is added {}", user);
         return userMapper.toUserDTO(user);
     }

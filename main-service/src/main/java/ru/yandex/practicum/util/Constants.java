@@ -12,6 +12,7 @@ public class Constants {
     public static final String EVENT_ID_URI = "/{eventId}";
     public static final String EVENTS_PRIVATE_URI = "/users/{userId}/events";
     public static final String EVENTS_PUBLIC_URI = "/events";
+    public static final String EVENT_NOT_FOUND = "Event ID%d not found";
     public static final String REQUESTS_PRIVATE_URI = "/users/{userId}/requests";
     public static final String USERS_ADMIN_URI = "/admin/users";
     public static final String USER_NOT_FOUND = "User ID%d not found";

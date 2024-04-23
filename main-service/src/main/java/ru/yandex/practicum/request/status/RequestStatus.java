@@ -1,6 +1,6 @@
 package ru.yandex.practicum.request.status;
 
-public enum Status {
+public enum RequestStatus {
     PENDING,
     CONFIRMED,
     REJECTED,

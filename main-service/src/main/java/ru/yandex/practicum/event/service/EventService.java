@@ -10,6 +10,7 @@ import ru.yandex.practicum.event.state.EventState;
 import ru.yandex.practicum.request.dto.RequestDTO;
 import ru.yandex.practicum.request.dto.RequestResultDTO;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public interface EventService {
 
     List<ShortEventDTO> getPublishedEvents(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart,
                                            LocalDateTime rangeEnd, Boolean onlyAvailable, EventSort sort,
-                                           PageRequest pageRequest);
+                                           PageRequest pageRequest, HttpServletRequest request);
 
-    FullEventDTO getPublishedEventById(Long id);
+    FullEventDTO getPublishedEventById(Long id, HttpServletRequest request);
 }

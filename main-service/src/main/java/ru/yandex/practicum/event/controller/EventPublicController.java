@@ -10,6 +10,7 @@ import ru.yandex.practicum.event.dto.ShortEventDTO;
 import ru.yandex.practicum.event.service.EventService;
 import ru.yandex.practicum.event.state.EventSort;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
@@ -39,15 +40,16 @@ public class EventPublicController {
                                                   @RequestParam(defaultValue = "false") Boolean onlyAvailable,
                                                   @RequestParam EventSort eventSort,
                                                   @RequestParam(defaultValue = "0") @PositiveOrZero int from,
-                                                  @RequestParam(defaultValue = "10") @Positive int size) {
+                                                  @RequestParam(defaultValue = "10") @Positive int size,
+                                                  HttpServletRequest request) {
         log.info("Response from GET request on {}", EVENTS_PUBLIC_URI);
         return eventService.getPublishedEvents(text, categories, paid, rangeStart, rangEnd, onlyAvailable, eventSort,
-                FromSizePage(from, size));
+                FromSizePage(from, size), request);
     }
 
     @GetMapping(ID_URI)
-    public FullEventDTO getPublishedEventById(@PathVariable @Positive Long id) {
+    public FullEventDTO getPublishedEventById(@PathVariable @Positive Long id, HttpServletRequest request) {
         log.info("Response from GET request on {}", EVENTS_PUBLIC_URI + ID_URI);
-        return eventService.getPublishedEventById(id);
+        return eventService.getPublishedEventById(id, request);
     }
 }
