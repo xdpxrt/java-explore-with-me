@@ -8,6 +8,10 @@ public class Constants {
     public static final String CATEGORIES_ADMIN_URI = "/admin/categories";
     public static final String CATEGORIES_PUBLIC_URI = "/categories";
     public static final String CATEGORY_NOT_FOUND = "Category ID%d not found";
+    public static final String COMPILATIONS_ADMIN_URI = "/admin/compilations";
+    public static final String COMPILATIONS_PUBLIC_URI = "/compilations";
+    public static final String COMPILATION_ID_URI = "/{compId}";
+    public static final String COMPILATION_NOT_FOUND = "Compilation ID%d not found";
     public static final String EVENTS_ADMIN_URI = "/admin/events";
     public static final String EVENT_ID_URI = "/{eventId}";
     public static final String EVENTS_PRIVATE_URI = "/users/{userId}/events";

@@ -5,7 +5,10 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import ru.yandex.practicum.event.model.Event;
 
 import java.util.List;
+import java.util.Set;
 
 public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecificationExecutor<Event> {
     List<Event> findAllByInitiatorId(Long userId);
+
+    List<Event> findAllByIdIn(Set<Long> ids);
 }
