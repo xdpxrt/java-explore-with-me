@@ -10,6 +10,7 @@ import ru.yandex.practicum.event.dto.ShortEventDTO;
 import ru.yandex.practicum.event.model.Event;
 
 import java.util.List;
+import java.util.Set;
 
 @DecoratedWith(EventMapperDecorator.class)
 @Mapper(componentModel = "spring")
@@ -22,5 +23,7 @@ public interface EventMapper {
 
     ShortEventDTO toShortEventDTO(Event event);
 
-    List<ShortEventDTO> toShortEventDTO(List<Event> event);
+    List<ShortEventDTO> toShortEventDTO(List<Event> events);
+
+    Set<ShortEventDTO> toShortEventDTO(Set<Event> events);
 }
