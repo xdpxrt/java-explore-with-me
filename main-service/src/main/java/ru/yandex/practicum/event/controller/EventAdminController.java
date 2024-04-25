@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.event.dto.AdminUpdateEventDTO;
 import ru.yandex.practicum.event.dto.FullEventDTO;
-import ru.yandex.practicum.event.dto.UpdateEventDTO;
 import ru.yandex.practicum.event.service.EventService;
 import ru.yandex.practicum.event.state.EventState;
 
@@ -44,10 +44,10 @@ public class EventAdminController {
     }
 
     @PatchMapping(EVENT_ID_URI)
-    public FullEventDTO updateEventByAdmin(@RequestBody @Valid UpdateEventDTO updateEventDTO,
+    public FullEventDTO updateEventByAdmin(@RequestBody @Valid AdminUpdateEventDTO adminUpdateEventDTO,
                                            @PathVariable Long eventId) {
         log.info("Response from GET request on {}", EVENTS_ADMIN_URI + EVENT_ID_URI);
-        checkEventStart(updateEventDTO.getEventDate());
-        return eventService.updateEventByAdmin(updateEventDTO, eventId);
+        checkEventStart(adminUpdateEventDTO.getEventDate());
+        return eventService.updateEventByAdmin(adminUpdateEventDTO, eventId);
     }
 }

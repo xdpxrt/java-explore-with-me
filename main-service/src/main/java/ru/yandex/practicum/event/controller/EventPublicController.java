@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.error.exception.ConflictException;
 import ru.yandex.practicum.event.dto.FullEventDTO;
 import ru.yandex.practicum.event.dto.ShortEventDTO;
 import ru.yandex.practicum.event.service.EventService;
@@ -36,14 +37,15 @@ public class EventPublicController {
                                                   @RequestParam(required = false)
                                                   @DateTimeFormat(pattern = DATE_FORMAT) LocalDateTime rangeStart,
                                                   @RequestParam(required = false)
-                                                  @DateTimeFormat(pattern = DATE_FORMAT) LocalDateTime rangEnd,
+                                                  @DateTimeFormat(pattern = DATE_FORMAT) LocalDateTime rangeEnd,
                                                   @RequestParam(defaultValue = "false") Boolean onlyAvailable,
                                                   @RequestParam EventSort eventSort,
                                                   @RequestParam(defaultValue = "0") @PositiveOrZero int from,
                                                   @RequestParam(defaultValue = "10") @Positive int size,
                                                   HttpServletRequest request) {
         log.info("Response from GET request on {}", EVENTS_PUBLIC_URI);
-        return eventService.getPublishedEvents(text, categories, paid, rangeStart, rangEnd, onlyAvailable, eventSort,
+        if (rangeStart.isAfter(rangeEnd)) throw new ConflictException("The date of start cannot be after end");
+        return eventService.getPublishedEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, eventSort,
                 FromSizePage(from, size), request);
     }
 

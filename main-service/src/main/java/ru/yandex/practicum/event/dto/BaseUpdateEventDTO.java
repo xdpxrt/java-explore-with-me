@@ -1,12 +1,16 @@
 package ru.yandex.practicum.event.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.yandex.practicum.event.location.dto.LocationDTO;
-import ru.yandex.practicum.event.state.StateAction;
 
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 import static ru.yandex.practicum.util.Constants.DATE_FORMAT;
@@ -15,7 +19,7 @@ import static ru.yandex.practicum.util.Constants.DATE_FORMAT;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateEventDTO {
+public class BaseUpdateEventDTO {
     @Size(min = 20, max = 2000)
     private String annotation;
     private Long category;
@@ -30,7 +34,6 @@ public class UpdateEventDTO {
     @PositiveOrZero
     private Long participantLimit;
     private Boolean requestModeration;
-    private StateAction stateAction;
     @Size(min = 3, max = 120)
     private String title;
 }

@@ -36,7 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public void deleteCategory(Long catId) {
         log.info("Deleting category ID{}", catId);
-        CategoryExistence(catId);
+        GetCategory(catId);
         categoryRepository.deleteById(catId);
         log.info("Category ID{} is deleted", catId);
     }
@@ -45,8 +45,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public CategoryDTO updateCategory(Long catId, NewCategoryDTO newCategoryDTO) {
         log.info("Updating category ID{}", catId);
-        Category category = categoryRepository.findById(catId).orElseThrow(() ->
-                new NotFoundException(String.format(CATEGORY_NOT_FOUND, catId)));
+        Category category = GetCategory(catId);
         category.setName(newCategoryDTO.getName());
         Category updatedCategory = categoryRepository.save(category);
         log.info("Category is updated {}", category);
@@ -57,8 +56,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional(readOnly = true)
     public CategoryDTO getCategory(Long catId) {
         log.info("Getting category ID{}", catId);
-        Category category = categoryRepository.findById(catId).orElseThrow(() ->
-                new NotFoundException(String.format(CATEGORY_NOT_FOUND, catId)));
+        Category category = GetCategory(catId);
         return categoryMapper.toCategoryDTO(category);
     }
 
@@ -69,8 +67,8 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryMapper.toCategoryDTO(categoryRepository.findAll());
     }
 
-    public void CategoryExistence(Long catId) {
-        if (!categoryRepository.existsById(catId))
-            throw new NotFoundException(String.format(CATEGORY_NOT_FOUND, catId));
+    public Category GetCategory(Long catId) {
+        return categoryRepository.findById(catId).orElseThrow(() ->
+                new NotFoundException(String.format(CATEGORY_NOT_FOUND, catId)));
     }
 }

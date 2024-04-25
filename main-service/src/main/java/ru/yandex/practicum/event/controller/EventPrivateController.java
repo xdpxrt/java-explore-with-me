@@ -7,10 +7,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.event.dto.FullEventDTO;
 import ru.yandex.practicum.event.dto.NewEventDTO;
-import ru.yandex.practicum.event.dto.UpdateEventDTO;
+import ru.yandex.practicum.event.dto.ShortEventDTO;
+import ru.yandex.practicum.event.dto.UserUpdateEventDTO;
 import ru.yandex.practicum.event.service.EventService;
 import ru.yandex.practicum.request.dto.RequestDTO;
 import ru.yandex.practicum.request.dto.RequestResultDTO;
+import ru.yandex.practicum.request.dto.RequestUpdateDTO;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -48,20 +50,20 @@ public class EventPrivateController {
     }
 
     @GetMapping
-    public List<FullEventDTO> getAllEvents(@PathVariable @Positive Long userId,
-                                           @RequestParam(defaultValue = "0") @PositiveOrZero int from,
-                                           @RequestParam(defaultValue = "10") @Positive int size) {
+    public List<ShortEventDTO> getAllEvents(@PathVariable @Positive Long userId,
+                                            @RequestParam(defaultValue = "0") @PositiveOrZero int from,
+                                            @RequestParam(defaultValue = "10") @Positive int size) {
         log.info("Response from GET request on {}", EVENTS_PRIVATE_URI);
         return eventService.getAllEvents(userId, FromSizePage(from, size));
     }
 
     @PatchMapping(EVENT_ID_URI)
-    public FullEventDTO updateEvent(@RequestBody @Valid UpdateEventDTO updateEventDTO,
+    public FullEventDTO updateEvent(@RequestBody @Valid UserUpdateEventDTO userUpdateEventDTO,
                                     @PathVariable @Positive Long userId,
                                     @PathVariable @Positive Long eventId) {
         log.info("Response from PATCH request on {}{}", EVENTS_PRIVATE_URI, EVENT_ID_URI);
-        checkEventStart(updateEventDTO.getEventDate());
-        return eventService.updateEvent(updateEventDTO, userId, eventId);
+        checkEventStart(userUpdateEventDTO.getEventDate());
+        return eventService.updateEvent(userUpdateEventDTO, userId, eventId);
     }
 
     @GetMapping(EVENT_ID_REQUESTS_URI)
@@ -72,10 +74,10 @@ public class EventPrivateController {
     }
 
     @PatchMapping(EVENT_ID_REQUESTS_URI)
-    public RequestResultDTO updateRequestsStatus(@RequestBody @Valid RequestResultDTO requestResultDTO,
+    public RequestResultDTO updateRequestsStatus(@RequestBody @Valid RequestUpdateDTO requestRerequestUpdateDTO,
                                                  @PathVariable @Positive Long userId,
                                                  @PathVariable @Positive Long eventId) {
         log.info("Response from PATCH request on {}{}", EVENTS_PRIVATE_URI, EVENT_ID_REQUESTS_URI);
-        return eventService.updateRequestsStatus(requestResultDTO, userId, eventId);
+        return eventService.updateRequestsStatus(requestRerequestUpdateDTO, userId, eventId);
     }
 }

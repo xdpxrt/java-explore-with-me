@@ -3,6 +3,7 @@ package ru.yandex.practicum.request.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.error.exception.ConflictException;
 import ru.yandex.practicum.error.exception.NotFoundException;
 import ru.yandex.practicum.event.model.Event;
@@ -12,15 +13,13 @@ import ru.yandex.practicum.request.dto.RequestDTO;
 import ru.yandex.practicum.request.mapper.RequestMapper;
 import ru.yandex.practicum.request.model.Request;
 import ru.yandex.practicum.request.repository.RequestRepository;
-import ru.yandex.practicum.request.status.RequestStatus;
 import ru.yandex.practicum.user.model.User;
 import ru.yandex.practicum.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static ru.yandex.practicum.request.status.RequestStatus.CONFIRMED;
-import static ru.yandex.practicum.request.status.RequestStatus.PENDING;
+import static ru.yandex.practicum.request.status.RequestStatus.*;
 import static ru.yandex.practicum.util.Constants.EVENT_NOT_FOUND;
 import static ru.yandex.practicum.util.Constants.USER_NOT_FOUND;
 
@@ -35,10 +34,10 @@ public class RequestServiceImpl implements RequestService {
     private final RequestMapper requestMapper;
 
     @Override
+    @Transactional
     public RequestDTO addRequest(Long userId, Long eventId) {
         log.info("Adding request from user ID{} to event ID{}", userId, eventId);
-        User user = userRepository.findById(userId).orElseThrow(() ->
-                new NotFoundException(String.format(USER_NOT_FOUND, userId)));
+        User user = GetUser(userId);
         Event event = eventRepository.findById(eventId).orElseThrow(() ->
                 new NotFoundException(String.format(EVENT_NOT_FOUND, eventId)));
         if (event.getInitiator().getId().equals(userId)) {
@@ -64,20 +63,25 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<RequestDTO> getAllRequests(Long userId) {
-        return null;
+        log.info(String.format("Getting requests of user ID%d", userId));
+        GetUser(userId);
+        return requestMapper.toRequestDTO(requestRepository.findAllByRequesterId(userId));
     }
 
     @Override
     public RequestDTO cancelRequest(Long userId, Long requestId) {
-        return null;
+        log.info(String.format("Canceling request ID%d", requestId));
+        GetUser(userId);
+        Request request = requestRepository.findById(requestId).orElseThrow(() ->
+                new NotFoundException(String.format("Request ID%d doesn't exist", requestId)));
+        request.setStatus(CANCELED);
+        return requestMapper.toRequestDTO(requestRepository.save(request));
     }
 
-    private void userExistence(Long userId) {
-        if (!userRepository.existsById(userId)) throw new NotFoundException(String.format(USER_NOT_FOUND, userId));
-    }
-
-    private void eventExistence(Long eventId) {
-        if (!eventRepository.existsById(eventId)) throw new NotFoundException(String.format(EVENT_NOT_FOUND, eventId));
+    private User GetUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() ->
+                new NotFoundException(String.format(USER_NOT_FOUND, userId)));
     }
 }
