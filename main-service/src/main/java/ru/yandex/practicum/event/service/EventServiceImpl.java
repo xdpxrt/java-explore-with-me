@@ -69,8 +69,6 @@ public class EventServiceImpl implements EventService {
         newEvent.setLocation(location);
         newEvent.setCreatedOn(LocalDateTime.now());
         newEvent.setState(PENDING);
-        newEvent.setViews(0L);
-        newEvent.setConfirmedRequests(0L);
         Event event = eventRepository.save(newEvent);
         log.info("Event is added {}", event);
         return eventMapper.toFullEventDTO(event);

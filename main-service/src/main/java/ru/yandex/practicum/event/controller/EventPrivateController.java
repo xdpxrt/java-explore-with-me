@@ -1,6 +1,7 @@
 package ru.yandex.practicum.event.controller;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -27,7 +28,7 @@ import static ru.yandex.practicum.util.Utilities.checkEventStart;
 @Slf4j
 @Validated
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping(EVENTS_PRIVATE_URI)
 public class EventPrivateController {
     public static final String EVENT_ID_REQUESTS_URI = "/{eventId}/requests";

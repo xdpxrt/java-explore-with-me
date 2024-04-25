@@ -39,7 +39,7 @@ public class CompilationServiceImpl implements CompilationsService {
         HashSet<Event> events = newCompilationDTO.getEvents() == null ? new HashSet<>()
                 : new HashSet<>(eventRepository.findAllByIdIn(newCompilationDTO.getEvents()));
         compilation.setEvents(events);
-        return compilationMapper.toCompilationDTO(compilationRepository.save(compilation), eventMapper);
+        return compilationMapper.toCompilationDTO(compilationRepository.save(compilation));
     }
 
     @Override
@@ -61,14 +61,14 @@ public class CompilationServiceImpl implements CompilationsService {
         }
         if (updateCompilationDTO.getPinned() != null) compilation.setPinned(updateCompilationDTO.getPinned());
         if (updateCompilationDTO.getTitle() != null) compilation.setTitle(updateCompilationDTO.getTitle());
-        return compilationMapper.toCompilationDTO(compilationRepository.save(compilation), eventMapper);
+        return compilationMapper.toCompilationDTO(compilationRepository.save(compilation));
     }
 
     @Override
     @Transactional(readOnly = true)
     public CompilationDTO getCompilation(Long compId) {
         log.info("Getting compilation ID{}", compId);
-        return compilationMapper.toCompilationDTO(getCompilationIfExist(compId), eventMapper);
+        return compilationMapper.toCompilationDTO(getCompilationIfExist(compId));
     }
 
     @Override
