@@ -64,7 +64,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional(readOnly = true)
     public List<CategoryDTO> getAllCategories(PageRequest pageRequest) {
         log.info("Getting list of categories");
-        return categoryMapper.toCategoryDTO(categoryRepository.findAll());
+        return categoryMapper.toCategoryDTO(categoryRepository.findAll(pageRequest).toList());
     }
 
     public Category GetCategory(Long catId) {

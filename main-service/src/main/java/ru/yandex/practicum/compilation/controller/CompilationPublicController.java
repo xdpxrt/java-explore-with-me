@@ -27,9 +27,9 @@ public class CompilationPublicController {
     }
 
     @GetMapping
-    public List<CompilationDTO> getCompilations(@RequestParam(required = false) Boolean pined,
+    public List<CompilationDTO> getCompilations(@RequestParam(defaultValue = "true") Boolean pined,
                                                 @RequestParam(defaultValue = "0") int from,
-                                                @RequestParam(defaultValue = "0") int size) {
+                                                @RequestParam(defaultValue = "10") int size) {
         log.info("Response from POST request on {}", COMPILATIONS_ADMIN_URI);
         return compilationsService.getCompilations(pined, FromSizePage(from, size));
     }

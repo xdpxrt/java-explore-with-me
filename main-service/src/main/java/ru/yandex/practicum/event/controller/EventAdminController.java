@@ -1,6 +1,7 @@
 package ru.yandex.practicum.event.controller;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
@@ -23,14 +24,14 @@ import static ru.yandex.practicum.util.Utilities.checkEventStart;
 @Slf4j
 @Validated
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping(EVENTS_ADMIN_URI)
 public class EventAdminController {
     private final EventService eventService;
 
     @GetMapping
     public List<FullEventDTO> getEventsByAdmin(@RequestParam(defaultValue = "") List<Long> usersIds,
-                                               @RequestParam(defaultValue = "") List<EventState> statesIds,
+                                               @RequestParam(defaultValue = "") List<EventState> states,
                                                @RequestParam(defaultValue = "") List<Long> eventsIds,
                                                @RequestParam(required = false)
                                                @DateTimeFormat(pattern = DATE_FORMAT) LocalDateTime rangeStart,
@@ -39,7 +40,7 @@ public class EventAdminController {
                                                @RequestParam(defaultValue = "0") @PositiveOrZero int from,
                                                @RequestParam(defaultValue = "10") @Positive int size) {
         log.info("Response from GET request on {}", EVENTS_ADMIN_URI);
-        return eventService.getEventsByAdmin(usersIds, statesIds, eventsIds, rangeStart, rangeEnd,
+        return eventService.getEventsByAdmin(usersIds, states, eventsIds, rangeStart, rangeEnd,
                 FromSizePage(from, size));
     }
 
@@ -47,7 +48,7 @@ public class EventAdminController {
     public FullEventDTO updateEventByAdmin(@RequestBody @Valid AdminUpdateEventDTO adminUpdateEventDTO,
                                            @PathVariable Long eventId) {
         log.info("Response from GET request on {}", EVENTS_ADMIN_URI + EVENT_ID_URI);
-        checkEventStart(adminUpdateEventDTO.getEventDate());
+        if (adminUpdateEventDTO.getEventDate() != null) checkEventStart(adminUpdateEventDTO.getEventDate());
         return eventService.updateEventByAdmin(adminUpdateEventDTO, eventId);
     }
 }

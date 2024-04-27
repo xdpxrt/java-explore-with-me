@@ -11,6 +11,8 @@ import ru.yandex.practicum.error.exceptions.ValidationException;
 import ru.yandex.practicum.service.StatsService;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static ru.yandex.practicum.util.Constants.DATE_FORMAT;
@@ -34,10 +36,10 @@ public class StatsController {
     public List<ViewStats> getStats(
             @RequestParam @DateTimeFormat(pattern = DATE_FORMAT) LocalDateTime start,
             @RequestParam @DateTimeFormat(pattern = DATE_FORMAT) LocalDateTime end,
-            @RequestParam(defaultValue = "") List<String> uris,
+            @RequestParam(defaultValue = "") String[] uris,
             @RequestParam(defaultValue = "false") boolean unique) {
         log.info("Response from GET request on /stats");
         if (start.isAfter(end)) throw new ValidationException(END_BEFORE_START);
-        return service.getStats(start, end, uris, unique);
+        return service.getStats(start, end, List.of(uris), unique);
     }
 }

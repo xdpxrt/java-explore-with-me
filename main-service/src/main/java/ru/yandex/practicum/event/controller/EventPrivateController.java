@@ -39,7 +39,10 @@ public class EventPrivateController {
     public FullEventDTO addEvent(@RequestBody @Valid NewEventDTO newEventDTO,
                                  @PathVariable @Positive Long userId) {
         log.info("Response from POST request on {}", EVENTS_PRIVATE_URI);
-        checkEventStart(newEventDTO.getEventDate());
+        if (newEventDTO.getEventDate() != null) checkEventStart(newEventDTO.getEventDate());
+        if (newEventDTO.getPaid() == null) newEventDTO.setPaid(false);
+        if (newEventDTO.getParticipantLimit() == null) newEventDTO.setParticipantLimit(0L);
+        if (newEventDTO.getRequestModeration() == null) newEventDTO.setRequestModeration(true);
         return eventService.addEvent(newEventDTO, userId);
     }
 
@@ -63,7 +66,7 @@ public class EventPrivateController {
                                     @PathVariable @Positive Long userId,
                                     @PathVariable @Positive Long eventId) {
         log.info("Response from PATCH request on {}{}", EVENTS_PRIVATE_URI, EVENT_ID_URI);
-        checkEventStart(userUpdateEventDTO.getEventDate());
+        if (userUpdateEventDTO.getEventDate() != null) checkEventStart(userUpdateEventDTO.getEventDate());
         return eventService.updateEvent(userUpdateEventDTO, userId, eventId);
     }
 
@@ -75,10 +78,10 @@ public class EventPrivateController {
     }
 
     @PatchMapping(EVENT_ID_REQUESTS_URI)
-    public RequestResultDTO updateRequestsStatus(@RequestBody @Valid RequestUpdateDTO requestRerequestUpdateDTO,
+    public RequestResultDTO updateRequestsStatus(@RequestBody @Valid RequestUpdateDTO requestUpdateDTO,
                                                  @PathVariable @Positive Long userId,
                                                  @PathVariable @Positive Long eventId) {
         log.info("Response from PATCH request on {}{}", EVENTS_PRIVATE_URI, EVENT_ID_REQUESTS_URI);
-        return eventService.updateRequestsStatus(requestRerequestUpdateDTO, userId, eventId);
+        return eventService.updateRequestsStatus(requestUpdateDTO, userId, eventId);
     }
 }

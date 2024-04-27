@@ -17,5 +17,5 @@ public class RequestUpdateDTO {
     @NotNull
     private List<Long> requestIds;
     @NotNull
-    private RequestStatus requestStatus;
+    private RequestStatus status;
 }

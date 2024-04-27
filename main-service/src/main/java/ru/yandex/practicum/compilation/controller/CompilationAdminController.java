@@ -27,6 +27,7 @@ public class CompilationAdminController {
     @ResponseStatus(HttpStatus.CREATED)
     CompilationDTO addCompilation(@RequestBody @Valid NewCompilationDTO newCompilationDTO) {
         log.info("Response from POST request on {}", COMPILATIONS_ADMIN_URI);
+        if (newCompilationDTO.getPinned() == null) newCompilationDTO.setPinned(false);
         return compilationsService.addCompilation(newCompilationDTO);
     }
 
@@ -38,7 +39,7 @@ public class CompilationAdminController {
     }
 
     @PatchMapping(COMPILATION_ID_URI)
-    CompilationDTO updateCompilation(@RequestBody UpdateCompilationDTO updateCompilationDTO,
+    CompilationDTO updateCompilation(@RequestBody @Valid UpdateCompilationDTO updateCompilationDTO,
                                      @PathVariable Long compId) {
         log.info("Response from PATCH request on {}/{}", COMPILATIONS_ADMIN_URI, compId);
         return compilationsService.updateCompilation(updateCompilationDTO, compId);

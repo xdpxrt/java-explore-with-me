@@ -2,6 +2,7 @@ package ru.yandex.practicum.event.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import ru.yandex.practicum.event.location.dto.LocationDTO;
 
 import javax.validation.Valid;
@@ -30,11 +31,9 @@ public class NewEventDTO {
     @Valid
     @NotNull
     private LocationDTO location;
-    @NotNull
     private Boolean paid;
     @PositiveOrZero
     private Long participantLimit;
-    @NotNull
     private Boolean requestModeration;
     @NotBlank
     @Size(min = 3, max = 120)

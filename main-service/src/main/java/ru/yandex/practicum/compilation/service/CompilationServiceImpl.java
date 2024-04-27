@@ -11,11 +11,14 @@ import ru.yandex.practicum.compilation.dto.UpdateCompilationDTO;
 import ru.yandex.practicum.compilation.mapper.CompilationMapper;
 import ru.yandex.practicum.compilation.model.Compilation;
 import ru.yandex.practicum.compilation.repository.CompilationRepository;
+import ru.yandex.practicum.error.exception.ConflictException;
 import ru.yandex.practicum.error.exception.NotFoundException;
 import ru.yandex.practicum.event.mapper.EventMapper;
 import ru.yandex.practicum.event.model.Event;
 import ru.yandex.practicum.event.repository.EventRepository;
+import ru.yandex.practicum.event.service.EventService;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -29,17 +32,21 @@ public class CompilationServiceImpl implements CompilationsService {
     private final EventRepository eventRepository;
 
     private final CompilationMapper compilationMapper;
-    private final EventMapper eventMapper;
+    private final EventService eventService;
 
     @Override
     @Transactional
     public CompilationDTO addCompilation(NewCompilationDTO newCompilationDTO) {
         log.info("Adding compilation {}", newCompilationDTO);
         Compilation compilation = compilationMapper.toCompilation(newCompilationDTO);
-        HashSet<Event> events = newCompilationDTO.getEvents() == null ? new HashSet<>()
-                : new HashSet<>(eventRepository.findAllByIdIn(newCompilationDTO.getEvents()));
-        compilation.setEvents(events);
-        return compilationMapper.toCompilationDTO(compilationRepository.save(compilation));
+        List<Event> events = newCompilationDTO.getEvents() == null ? new ArrayList<>()
+                : eventRepository.findAllByIdIn(newCompilationDTO.getEvents());
+        events = eventService.fillWithConfirmedRequests(events);
+        events = eventService.fillWithEventViews(events);
+        compilation.setEvents(new HashSet<>(events));
+        CompilationDTO compilationDTO = compilationMapper.toCompilationDTO(compilationRepository.save(compilation));
+        log.info("Added new compilation {}", compilationDTO);
+        return compilationDTO;
     }
 
     @Override
@@ -61,6 +68,7 @@ public class CompilationServiceImpl implements CompilationsService {
         }
         if (updateCompilationDTO.getPinned() != null) compilation.setPinned(updateCompilationDTO.getPinned());
         if (updateCompilationDTO.getTitle() != null) compilation.setTitle(updateCompilationDTO.getTitle());
+
         return compilationMapper.toCompilationDTO(compilationRepository.save(compilation));
     }
 

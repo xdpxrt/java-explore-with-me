@@ -57,7 +57,7 @@ public class RequestServiceImpl implements RequestService {
                 .created(LocalDateTime.now())
                 .event(event)
                 .requester(user)
-                .status((event.getRequestModeration()) ? PENDING : CONFIRMED)
+                .status((event.getParticipantLimit() == 0) ? CONFIRMED : PENDING)
                 .build();
         return requestMapper.toRequestDTO(requestRepository.save(request));
     }

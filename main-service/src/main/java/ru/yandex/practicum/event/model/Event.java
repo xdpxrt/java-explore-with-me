@@ -60,6 +60,7 @@ public class Event {
     @ManyToOne(fetch = FetchType.LAZY)
     private User initiator;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "event_state")
     private EventState state;
 

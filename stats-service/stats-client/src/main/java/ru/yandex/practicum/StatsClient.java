@@ -37,14 +37,16 @@ public class StatsClient {
     public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         String uri = resource.getString("client.stats");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String request = String.format(uri, start.format(formatter), end.format(formatter), uris, unique);
+        String request = String.format(uri, start.format(formatter), end.format(formatter),
+                String.join(",", uris), unique);
         log.info("Request on uri {}", request);
-        return webClient
+        var x = webClient
                 .get()
                 .uri(request)
                 .retrieve()
                 .bodyToFlux(ViewStats.class)
                 .collectList()
                 .block();
+        return x;
     }
 }
