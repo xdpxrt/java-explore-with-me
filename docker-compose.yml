@@ -10,9 +10,8 @@ services:
       - stats-db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats-db
-      - POSTGRES_DB=stats-db
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
 
   stats-db:
     image: postgres:14-alpine
@@ -34,9 +33,8 @@ services:
       - ewm-db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm-db
-      - POSTGRES_DB=ewm-db
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
 
   ewm-db:
     image: postgres:14-alpine
