@@ -36,10 +36,10 @@ public class RequestController {
         return requestService.getAllRequests(userId);
     }
 
-    @PatchMapping
+    @PatchMapping("/{requestId}/cancel")
     public RequestDTO cancelRequest(@PathVariable @Positive Long userId,
                                     @PathVariable @Positive Long requestId) {
         log.info("Response from GET request on {}", REQUESTS_PRIVATE_URI);
-        return requestService.cancelRequest(userId,requestId);
+        return requestService.cancelRequest(userId, requestId);
     }
 }

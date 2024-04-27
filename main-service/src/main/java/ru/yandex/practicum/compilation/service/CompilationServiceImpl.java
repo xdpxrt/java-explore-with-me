@@ -84,7 +84,8 @@ public class CompilationServiceImpl implements CompilationsService {
     public List<CompilationDTO> getCompilations(Boolean pined, PageRequest pageRequest) {
         log.info("Getting compilations");
         return (pined == null) ? compilationMapper.toCompilationDTO(compilationRepository.findAll(pageRequest).toList())
-                : compilationMapper.toCompilationDTO(compilationRepository.findAllByPinned(pined, pageRequest));
+                : compilationMapper.toCompilationDTO(compilationRepository.findAllByPinned(pined, pageRequest).toList());
+
     }
 
     @Transactional(readOnly = true)

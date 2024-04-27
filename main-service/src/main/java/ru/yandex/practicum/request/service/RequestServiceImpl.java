@@ -13,6 +13,7 @@ import ru.yandex.practicum.request.dto.RequestDTO;
 import ru.yandex.practicum.request.mapper.RequestMapper;
 import ru.yandex.practicum.request.model.Request;
 import ru.yandex.practicum.request.repository.RequestRepository;
+import ru.yandex.practicum.request.status.RequestStatus;
 import ru.yandex.practicum.user.model.User;
 import ru.yandex.practicum.user.repository.UserRepository;
 
@@ -49,17 +50,22 @@ public class RequestServiceImpl implements RequestService {
         if (requestRepository.existsByEventIdAndRequesterId(eventId, userId)) {
             throw new ConflictException(String.format("User ID%d already send request on event ID%d", userId, eventId));
         }
+        List<Request> list = requestRepository.findAll();
         Long confirmedRequests = requestRepository.countByEventIdAndStatus(eventId, CONFIRMED);
         if (event.getParticipantLimit() > 0 && event.getParticipantLimit() <= confirmedRequests) {
             throw new ConflictException("Limit of the participants is already reached");
         }
+        RequestStatus status;
+        status = event.getRequestModeration() ? PENDING : CONFIRMED;
+        if (event.getParticipantLimit() == 0) status = CONFIRMED;
         Request request = Request.builder()
                 .created(LocalDateTime.now())
                 .event(event)
                 .requester(user)
-                .status((event.getParticipantLimit() == 0) ? CONFIRMED : PENDING)
+                .status(status)
                 .build();
-        return requestMapper.toRequestDTO(requestRepository.save(request));
+        return requestMapper.
+                toRequestDTO(requestRepository.save(request));
     }
 
     @Override

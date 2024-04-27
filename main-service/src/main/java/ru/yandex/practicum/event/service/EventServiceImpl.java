@@ -198,16 +198,17 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public FullEventDTO updateEventByAdmin(AdminUpdateEventDTO userUpdateEventDTO, Long eventId) {
+    public FullEventDTO updateEventByAdmin(AdminUpdateEventDTO adminUpdateEventDTO, Long eventId) {
         log.info(String.format("Updating event ID%d by admin", eventId));
-        Event event = checkEventForUpdate(getEvent(eventId), userUpdateEventDTO);
-        if (userUpdateEventDTO.getStateAction() != null) {
-            switch (userUpdateEventDTO.getStateAction()) {
+        Event event = checkEventForUpdate(getEvent(eventId), adminUpdateEventDTO);
+        if (event.getState().equals(CANCELED)) throw new ConflictException("Not possible to update canceled event");
+        if (adminUpdateEventDTO.getStateAction() != null) {
+            switch (adminUpdateEventDTO.getStateAction()) {
                 case REJECT_EVENT:
                     event.setState(CANCELED);
                     break;
                 case PUBLISH_EVENT:
-                    event.setCreatedOn(LocalDateTime.now());
+                    event.setPublishedOn(LocalDateTime.now());
                     event.setState(PUBLISHED);
                     break;
             }

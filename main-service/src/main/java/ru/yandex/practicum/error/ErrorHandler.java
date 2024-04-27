@@ -1,6 +1,7 @@
 package ru.yandex.practicum.error;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -39,13 +40,12 @@ public class ErrorHandler {
                 LocalDateTime.now().format(FORMATTER));
     }
 
-    @ExceptionHandler(DataAccessException.class)
+    @ExceptionHandler({DataAccessException.class, ConflictException.class})
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ApiError handleConflictException(ConflictException e) {
-        return new ApiError("HttpStatus.CONFLICT.name()", "Incorrectly conditions fot this request",
+    public ApiError handleConflictException(RuntimeException e) {
+        return new ApiError(HttpStatus.CONFLICT.name(), "Incorrectly conditions fot this request",
                 e.getMessage(), LocalDateTime.now().format(FORMATTER));
     }
-
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
