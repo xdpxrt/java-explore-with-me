@@ -3,7 +3,6 @@ package ru.yandex.practicum.event.location.model;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter

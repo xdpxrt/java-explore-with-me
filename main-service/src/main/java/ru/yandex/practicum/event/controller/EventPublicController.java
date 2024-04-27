@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.error.exception.ConflictException;
 import ru.yandex.practicum.error.exception.ValidationException;
 import ru.yandex.practicum.event.dto.FullEventDTO;
 import ru.yandex.practicum.event.dto.ShortEventDTO;
@@ -20,7 +19,7 @@ import java.util.List;
 
 import static ru.yandex.practicum.util.Constants.DATE_FORMAT;
 import static ru.yandex.practicum.util.Constants.EVENTS_PUBLIC_URI;
-import static ru.yandex.practicum.util.Utilities.FromSizePage;
+import static ru.yandex.practicum.util.Utilities.fromSizePage;
 
 @Slf4j
 @Validated
@@ -48,7 +47,7 @@ public class EventPublicController {
         if (rangeStart != null && rangeEnd != null && rangeStart.isAfter(rangeEnd))
             throw new ValidationException("The date of start cannot be after end");
         return eventService.getPublishedEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort,
-                FromSizePage(from, size), request);
+                fromSizePage(from, size), request);
     }
 
     @GetMapping(ID_URI)

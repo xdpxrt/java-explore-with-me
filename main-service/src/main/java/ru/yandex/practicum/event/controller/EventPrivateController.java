@@ -1,6 +1,5 @@
 package ru.yandex.practicum.event.controller;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,7 +21,7 @@ import java.util.List;
 
 import static ru.yandex.practicum.util.Constants.EVENTS_PRIVATE_URI;
 import static ru.yandex.practicum.util.Constants.EVENT_ID_URI;
-import static ru.yandex.practicum.util.Utilities.FromSizePage;
+import static ru.yandex.practicum.util.Utilities.fromSizePage;
 import static ru.yandex.practicum.util.Utilities.checkEventStart;
 
 @Slf4j
@@ -58,7 +57,7 @@ public class EventPrivateController {
                                             @RequestParam(defaultValue = "0") @PositiveOrZero int from,
                                             @RequestParam(defaultValue = "10") @Positive int size) {
         log.info("Response from GET request on {}", EVENTS_PRIVATE_URI);
-        return eventService.getAllEvents(userId, FromSizePage(from, size));
+        return eventService.getAllEvents(userId, fromSizePage(from, size));
     }
 
     @PatchMapping(EVENT_ID_URI)

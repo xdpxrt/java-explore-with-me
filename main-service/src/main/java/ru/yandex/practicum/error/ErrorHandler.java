@@ -1,7 +1,6 @@
 package ru.yandex.practicum.error;
 
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -11,7 +10,6 @@ import ru.yandex.practicum.error.exception.ForbiddenException;
 import ru.yandex.practicum.error.exception.NotFoundException;
 import ru.yandex.practicum.error.exception.ValidationException;
 
-import java.sql.SQLDataException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 

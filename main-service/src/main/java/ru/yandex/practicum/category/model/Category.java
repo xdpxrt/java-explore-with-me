@@ -1,7 +1,6 @@
 package ru.yandex.practicum.category.model;
 
 import lombok.*;
-import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
 

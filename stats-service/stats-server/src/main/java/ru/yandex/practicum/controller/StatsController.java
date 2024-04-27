@@ -11,8 +11,6 @@ import ru.yandex.practicum.error.exceptions.ValidationException;
 import ru.yandex.practicum.service.StatsService;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static ru.yandex.practicum.util.Constants.DATE_FORMAT;

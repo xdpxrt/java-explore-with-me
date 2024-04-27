@@ -11,7 +11,7 @@ public abstract class CompilationMapperDecorator implements CompilationMapper {
     @Autowired
     private EventMapper eventMapper;
 
-    public CompilationDTO compilationDTO(Compilation compilation){
+    public CompilationDTO compilationDTO(Compilation compilation) {
         CompilationDTO compilationDTO = compilationMapper.toCompilationDTO(compilation);
         compilationDTO.setEvents(eventMapper.toShortEventDTO(compilation.getEvents()));
         return compilationDTO;

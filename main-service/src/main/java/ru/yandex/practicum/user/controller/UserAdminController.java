@@ -15,7 +15,7 @@ import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 import static ru.yandex.practicum.util.Constants.USERS_ADMIN_URI;
-import static ru.yandex.practicum.util.Utilities.FromSizePage;
+import static ru.yandex.practicum.util.Utilities.fromSizePage;
 
 @Slf4j
 @Validated
@@ -44,6 +44,6 @@ public class UserAdminController {
                                   @RequestParam(defaultValue = "0") @PositiveOrZero int from,
                                   @RequestParam(defaultValue = "10") @Positive int size) {
         log.info("Response from GET request on {}", USERS_ADMIN_URI);
-        return userService.getUsers(ids, FromSizePage(from, size));
+        return userService.getUsers(ids, fromSizePage(from, size));
     }
 }

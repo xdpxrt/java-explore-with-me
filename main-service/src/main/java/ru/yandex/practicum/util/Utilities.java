@@ -6,7 +6,7 @@ import ru.yandex.practicum.error.exception.ConflictException;
 import java.time.LocalDateTime;
 
 public class Utilities {
-    public static PageRequest FromSizePage(int from, int size) {
+    public static PageRequest fromSizePage(int from, int size) {
         return PageRequest.of(from / size, size);
     }
 

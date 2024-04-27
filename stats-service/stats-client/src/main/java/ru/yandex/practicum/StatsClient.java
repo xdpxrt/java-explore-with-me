@@ -7,8 +7,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import ru.yandex.practicum.dto.EndpointHit;
 import ru.yandex.practicum.dto.ViewStats;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;

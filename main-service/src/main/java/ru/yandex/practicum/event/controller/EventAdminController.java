@@ -1,6 +1,5 @@
 package ru.yandex.practicum.event.controller;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static ru.yandex.practicum.util.Constants.*;
-import static ru.yandex.practicum.util.Utilities.FromSizePage;
+import static ru.yandex.practicum.util.Utilities.fromSizePage;
 import static ru.yandex.practicum.util.Utilities.checkEventStart;
 
 @Slf4j
@@ -41,7 +40,7 @@ public class EventAdminController {
                                                @RequestParam(defaultValue = "10") @Positive int size) {
         log.info("Response from GET request on {}", EVENTS_ADMIN_URI);
         return eventService.getEventsByAdmin(usersIds, states, eventsIds, rangeStart, rangeEnd,
-                FromSizePage(from, size));
+                fromSizePage(from, size));
     }
 
     @PatchMapping(EVENT_ID_URI)

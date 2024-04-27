@@ -38,7 +38,7 @@ public class RequestServiceImpl implements RequestService {
     @Transactional
     public RequestDTO addRequest(Long userId, Long eventId) {
         log.info("Adding request from user ID{} to event ID{}", userId, eventId);
-        User user = GetUser(userId);
+        User user = getUserIfExist(userId);
         Event event = eventRepository.findById(eventId).orElseThrow(() ->
                 new NotFoundException(String.format(EVENT_NOT_FOUND, eventId)));
         if (event.getInitiator().getId().equals(userId)) {
@@ -64,29 +64,28 @@ public class RequestServiceImpl implements RequestService {
                 .requester(user)
                 .status(status)
                 .build();
-        return requestMapper.
-                toRequestDTO(requestRepository.save(request));
+        return requestMapper.toRequestDTO(requestRepository.save(request));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<RequestDTO> getAllRequests(Long userId) {
         log.info(String.format("Getting requests of user ID%d", userId));
-        GetUser(userId);
+        getUserIfExist(userId);
         return requestMapper.toRequestDTO(requestRepository.findAllByRequesterId(userId));
     }
 
     @Override
     public RequestDTO cancelRequest(Long userId, Long requestId) {
         log.info(String.format("Canceling request ID%d", requestId));
-        GetUser(userId);
+        getUserIfExist(userId);
         Request request = requestRepository.findById(requestId).orElseThrow(() ->
                 new NotFoundException(String.format("Request ID%d doesn't exist", requestId)));
         request.setStatus(CANCELED);
         return requestMapper.toRequestDTO(requestRepository.save(request));
     }
 
-    private User GetUser(Long userId) {
+    private User getUserIfExist(Long userId) {
         return userRepository.findById(userId).orElseThrow(() ->
                 new NotFoundException(String.format(USER_NOT_FOUND, userId)));
     }

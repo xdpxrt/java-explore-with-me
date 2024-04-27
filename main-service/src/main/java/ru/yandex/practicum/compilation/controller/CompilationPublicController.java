@@ -10,7 +10,7 @@ import ru.yandex.practicum.compilation.service.CompilationsService;
 import java.util.List;
 
 import static ru.yandex.practicum.util.Constants.*;
-import static ru.yandex.practicum.util.Utilities.FromSizePage;
+import static ru.yandex.practicum.util.Utilities.fromSizePage;
 
 @Slf4j
 @Validated
@@ -31,6 +31,6 @@ public class CompilationPublicController {
                                                 @RequestParam(defaultValue = "0") int from,
                                                 @RequestParam(defaultValue = "10") int size) {
         log.info("Response from POST request on {}", COMPILATIONS_ADMIN_URI);
-        return compilationsService.getCompilations(pined, FromSizePage(from, size));
+        return compilationsService.getCompilations(pined, fromSizePage(from, size));
     }
 }
