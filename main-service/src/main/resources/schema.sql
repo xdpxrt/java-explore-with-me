@@ -47,6 +47,6 @@ CREATE TABLE IF NOT EXISTS compilations (
     title VARCHAR(200) UNIQUE NOT NULL
     );
 CREATE TABLE IF NOT EXISTS compilations_events(
-    compilations_id BIGINT REFERENCES compilations (id) NOT NULL,
-    events_id BIGINT REFERENCES events (id) NOT NULL
+    compilation_id BIGINT REFERENCES compilations (id) NOT NULL,
+    event_id BIGINT REFERENCES events (id) NOT NULL
     );
