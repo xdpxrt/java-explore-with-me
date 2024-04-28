@@ -20,10 +20,10 @@ public class StatsClient {
     private final WebClient webClient;
     private final ResourceBundle resource = ResourceBundle.getBundle("messages");
 
-    public EndpointHit addStat(EndpointHit endpointHit) {
+    public void addStat(EndpointHit endpointHit) {
         String uri = resource.getString("client.hits");
         log.info("Request on uri {} body {}", uri, endpointHit);
-        return webClient
+        webClient
                 .post()
                 .uri(uri)
                 .bodyValue(endpointHit)
@@ -38,13 +38,12 @@ public class StatsClient {
         String request = String.format(uri, start.format(formatter), end.format(formatter),
                 String.join(",", uris), unique);
         log.info("Request on uri {}", request);
-        var x = webClient
+        return webClient
                 .get()
                 .uri(request)
                 .retrieve()
                 .bodyToFlux(ViewStats.class)
                 .collectList()
                 .block();
-        return x;
     }
 }
