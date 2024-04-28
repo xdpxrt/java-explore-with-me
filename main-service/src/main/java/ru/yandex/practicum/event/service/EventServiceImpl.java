@@ -193,7 +193,7 @@ public class EventServiceImpl implements EventService {
         events = fillWithEventViews(events);
         return events.stream()
                 .map(eventMapper::toFullEventDTO)
-                .sorted(Comparator.comparing(FullEventDTO::getEventDate, Comparator.reverseOrder()))
+                .sorted(Comparator.comparing(FullEventDTO::getId, Comparator.reverseOrder()))
                 .collect(Collectors.toList());
     }
 

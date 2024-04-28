@@ -22,6 +22,7 @@ public class FullEventDTO {
     private String annotation;
     private CategoryDTO category;
     private Long confirmedRequests;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
     private LocalDateTime createdOn;
     private String description;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
