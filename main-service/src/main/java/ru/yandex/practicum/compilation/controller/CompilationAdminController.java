@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.compilation.dto.CompilationDTO;
 import ru.yandex.practicum.compilation.dto.NewCompilationDTO;
 import ru.yandex.practicum.compilation.dto.UpdateCompilationDTO;
-import ru.yandex.practicum.compilation.service.CompilationsService;
+import ru.yandex.practicum.compilation.service.CompilationService;
 
 import javax.validation.Valid;
 
@@ -21,27 +21,27 @@ import static ru.yandex.practicum.util.Constants.COMPILATION_ID_URI;
 @RequiredArgsConstructor
 @RequestMapping(COMPILATIONS_ADMIN_URI)
 public class CompilationAdminController {
-    public final CompilationsService compilationsService;
+    public final CompilationService compilationService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     CompilationDTO addCompilation(@RequestBody @Valid NewCompilationDTO newCompilationDTO) {
         log.info("Response from POST request on {}", COMPILATIONS_ADMIN_URI);
         if (newCompilationDTO.getPinned() == null) newCompilationDTO.setPinned(false);
-        return compilationsService.addCompilation(newCompilationDTO);
+        return compilationService.addCompilation(newCompilationDTO);
     }
 
     @DeleteMapping(COMPILATION_ID_URI)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteCompilation(@PathVariable Long compId) {
         log.info("Response from DELETE request on {}/{}", COMPILATIONS_ADMIN_URI, compId);
-        compilationsService.deleteCompilation(compId);
+        compilationService.deleteCompilation(compId);
     }
 
     @PatchMapping(COMPILATION_ID_URI)
     CompilationDTO updateCompilation(@RequestBody @Valid UpdateCompilationDTO updateCompilationDTO,
                                      @PathVariable Long compId) {
         log.info("Response from PATCH request on {}/{}", COMPILATIONS_ADMIN_URI, compId);
-        return compilationsService.updateCompilation(updateCompilationDTO, compId);
+        return compilationService.updateCompilation(updateCompilationDTO, compId);
     }
 }

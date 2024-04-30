@@ -3,7 +3,7 @@ package ru.yandex.practicum.request.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.request.model.Request;
-import ru.yandex.practicum.request.status.RequestStatus;
+import ru.yandex.practicum.util.Constants.RequestStatus;
 
 import java.util.List;
 

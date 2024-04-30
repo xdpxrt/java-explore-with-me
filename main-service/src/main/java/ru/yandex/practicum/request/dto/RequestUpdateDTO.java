@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.yandex.practicum.request.status.RequestStatus;
+import ru.yandex.practicum.util.Constants;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -17,5 +17,5 @@ public class RequestUpdateDTO {
     @NotNull
     private List<Long> requestIds;
     @NotNull
-    private RequestStatus status;
+    private Constants.RequestStatus status;
 }

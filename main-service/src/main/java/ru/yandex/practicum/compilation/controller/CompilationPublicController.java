@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.compilation.dto.CompilationDTO;
-import ru.yandex.practicum.compilation.service.CompilationsService;
+import ru.yandex.practicum.compilation.service.CompilationService;
 
 import java.util.List;
 
@@ -18,12 +18,12 @@ import static ru.yandex.practicum.util.Utilities.fromSizePage;
 @RequiredArgsConstructor
 @RequestMapping(COMPILATIONS_PUBLIC_URI)
 public class CompilationPublicController {
-    private final CompilationsService compilationsService;
+    private final CompilationService compilationService;
 
     @GetMapping(COMPILATION_ID_URI)
     public CompilationDTO getCompilation(@PathVariable Long compId) {
         log.info("Response from POST request on {}/{}", COMPILATIONS_ADMIN_URI, compId);
-        return compilationsService.getCompilation(compId);
+        return compilationService.getCompilation(compId);
     }
 
     @GetMapping
@@ -31,6 +31,6 @@ public class CompilationPublicController {
                                                 @RequestParam(defaultValue = "0") int from,
                                                 @RequestParam(defaultValue = "10") int size) {
         log.info("Response from POST request on {}", COMPILATIONS_ADMIN_URI);
-        return compilationsService.getCompilations(pined, fromSizePage(from, size));
+        return compilationService.getCompilations(pined, fromSizePage(from, size));
     }
 }

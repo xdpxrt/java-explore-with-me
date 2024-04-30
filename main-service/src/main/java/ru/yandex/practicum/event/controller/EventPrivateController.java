@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.event.dto.FullEventDTO;
 import ru.yandex.practicum.event.dto.NewEventDTO;
 import ru.yandex.practicum.event.dto.ShortEventDTO;
-import ru.yandex.practicum.event.dto.UserUpdateEventDTO;
+import ru.yandex.practicum.event.dto.UpdateEventDTO;
 import ru.yandex.practicum.event.service.EventService;
 import ru.yandex.practicum.request.dto.RequestDTO;
 import ru.yandex.practicum.request.dto.RequestResultDTO;
@@ -19,10 +19,9 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
-import static ru.yandex.practicum.util.Constants.EVENTS_PRIVATE_URI;
-import static ru.yandex.practicum.util.Constants.EVENT_ID_URI;
-import static ru.yandex.practicum.util.Utilities.fromSizePage;
+import static ru.yandex.practicum.util.Constants.*;
 import static ru.yandex.practicum.util.Utilities.checkEventStart;
+import static ru.yandex.practicum.util.Utilities.fromSizePage;
 
 @Slf4j
 @Validated
@@ -30,7 +29,6 @@ import static ru.yandex.practicum.util.Utilities.checkEventStart;
 @RequiredArgsConstructor
 @RequestMapping(EVENTS_PRIVATE_URI)
 public class EventPrivateController {
-    public static final String EVENT_ID_REQUESTS_URI = "/{eventId}/requests";
     private final EventService eventService;
 
     @PostMapping
@@ -61,12 +59,12 @@ public class EventPrivateController {
     }
 
     @PatchMapping(EVENT_ID_URI)
-    public FullEventDTO updateEvent(@RequestBody @Valid UserUpdateEventDTO userUpdateEventDTO,
+    public FullEventDTO updateEvent(@RequestBody @Valid UpdateEventDTO updateEventDTO,
                                     @PathVariable @Positive Long userId,
                                     @PathVariable @Positive Long eventId) {
         log.info("Response from PATCH request on {}{}", EVENTS_PRIVATE_URI, EVENT_ID_URI);
-        if (userUpdateEventDTO.getEventDate() != null) checkEventStart(userUpdateEventDTO.getEventDate());
-        return eventService.updateEvent(userUpdateEventDTO, userId, eventId);
+        if (updateEventDTO.getEventDate() != null) checkEventStart(updateEventDTO.getEventDate());
+        return eventService.updateEvent(updateEventDTO, userId, eventId);
     }
 
     @GetMapping(EVENT_ID_REQUESTS_URI)

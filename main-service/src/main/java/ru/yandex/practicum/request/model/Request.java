@@ -2,8 +2,8 @@ package ru.yandex.practicum.request.model;
 
 import lombok.*;
 import ru.yandex.practicum.event.model.Event;
-import ru.yandex.practicum.request.status.RequestStatus;
 import ru.yandex.practicum.user.model.User;
+import ru.yandex.practicum.util.Constants;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -34,5 +34,5 @@ public class Request {
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private RequestStatus status;
+    private Constants.RequestStatus status;
 }

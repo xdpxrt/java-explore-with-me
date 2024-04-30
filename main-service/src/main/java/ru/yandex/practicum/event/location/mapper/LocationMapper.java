@@ -7,7 +7,6 @@ import ru.yandex.practicum.event.location.model.Location;
 
 @Mapper(componentModel = "spring")
 public interface LocationMapper {
-    LocationDTO toLocationDTO(Location location);
 
     @Mapping(target = "id", ignore = true)
     Location toLocation(LocationDTO locationDTO);

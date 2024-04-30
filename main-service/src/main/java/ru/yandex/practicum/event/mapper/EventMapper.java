@@ -1,8 +1,6 @@
 package ru.yandex.practicum.event.mapper;
 
-import org.mapstruct.DecoratedWith;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 import ru.yandex.practicum.category.model.Category;
 import ru.yandex.practicum.event.dto.FullEventDTO;
 import ru.yandex.practicum.event.dto.NewEventDTO;
@@ -19,11 +17,12 @@ public interface EventMapper {
     @Mapping(source = "category", target = "category")
     Event toEvent(NewEventDTO newEventDTO, Category category);
 
-    FullEventDTO toFullEventDTO(Event event);
-
+    @Named(value = "shortDto")
     ShortEventDTO toShortEventDTO(Event event);
 
     List<ShortEventDTO> toShortEventDTO(List<Event> events);
 
     Set<ShortEventDTO> toShortEventDTO(Set<Event> events);
+
+    FullEventDTO toFullEventDTO(Event event);
 }

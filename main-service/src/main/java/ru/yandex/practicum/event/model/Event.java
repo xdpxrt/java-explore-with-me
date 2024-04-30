@@ -3,8 +3,8 @@ package ru.yandex.practicum.event.model;
 import lombok.*;
 import ru.yandex.practicum.category.model.Category;
 import ru.yandex.practicum.event.location.model.Location;
-import ru.yandex.practicum.event.state.EventState;
 import ru.yandex.practicum.user.model.User;
+import ru.yandex.practicum.util.Constants;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -62,7 +62,7 @@ public class Event {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "event_state")
-    private EventState state;
+    private Constants.EventState state;
 
     @Transient
     private Long views;

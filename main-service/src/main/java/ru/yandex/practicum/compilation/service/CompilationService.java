@@ -7,7 +7,7 @@ import ru.yandex.practicum.compilation.dto.UpdateCompilationDTO;
 
 import java.util.List;
 
-public interface CompilationsService {
+public interface CompilationService {
     CompilationDTO addCompilation(NewCompilationDTO newCompilationDTO);
 
     void deleteCompilation(Long compId);

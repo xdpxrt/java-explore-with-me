@@ -9,7 +9,6 @@ import ru.yandex.practicum.error.exception.ValidationException;
 import ru.yandex.practicum.event.dto.FullEventDTO;
 import ru.yandex.practicum.event.dto.ShortEventDTO;
 import ru.yandex.practicum.event.service.EventService;
-import ru.yandex.practicum.event.state.EventSort;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Positive;
@@ -17,8 +16,7 @@ import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static ru.yandex.practicum.util.Constants.DATE_FORMAT;
-import static ru.yandex.practicum.util.Constants.EVENTS_PUBLIC_URI;
+import static ru.yandex.practicum.util.Constants.*;
 import static ru.yandex.practicum.util.Utilities.fromSizePage;
 
 @Slf4j

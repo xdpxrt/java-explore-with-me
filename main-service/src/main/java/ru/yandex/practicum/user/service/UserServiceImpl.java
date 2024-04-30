@@ -26,25 +26,25 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDTO addUser(NewUserDTO newUserDTO) {
-        log.info("Adding user {}", newUserDTO);
+        log.debug("Adding user {}", newUserDTO);
         User user = userRepository.save(userMapper.toUser(newUserDTO));
-        log.info("User is added {}", user);
+        log.debug("User is added {}", user);
         return userMapper.toUserDTO(user);
     }
 
     @Override
     @Transactional
     public void deleteUser(Long userId) {
-        log.info("Deleting user ID{}", userId);
+        log.debug("Deleting user ID{}", userId);
         if (!userRepository.existsById(userId)) throw new NotFoundException(String.format(USER_NOT_FOUND, userId));
         userRepository.deleteById(userId);
-        log.info("User ID{} is deleted", userId);
+        log.debug("User ID{} is deleted", userId);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<UserDTO> getUsers(List<Long> ids, PageRequest pageRequest) {
-        log.info("Getting list of users");
+        log.debug("Getting list of users");
         return (ids.isEmpty()) ? userMapper.toUserDTO(userRepository.findAll(pageRequest).toList())
                 : userMapper.toUserDTO(userRepository.findAllByIdIn(ids, pageRequest));
     }

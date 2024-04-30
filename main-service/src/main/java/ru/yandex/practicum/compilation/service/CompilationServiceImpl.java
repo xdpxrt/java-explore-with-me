@@ -25,7 +25,7 @@ import static ru.yandex.practicum.util.Constants.COMPILATION_NOT_FOUND;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CompilationServiceImpl implements CompilationsService {
+public class CompilationServiceImpl implements CompilationService {
     private final CompilationRepository compilationRepository;
     private final EventRepository eventRepository;
 
@@ -35,7 +35,7 @@ public class CompilationServiceImpl implements CompilationsService {
     @Override
     @Transactional
     public CompilationDTO addCompilation(NewCompilationDTO newCompilationDTO) {
-        log.info("Adding compilation {}", newCompilationDTO);
+        log.debug("Adding compilation {}", newCompilationDTO);
         Compilation compilation = compilationMapper.toCompilation(newCompilationDTO);
         List<Event> events = newCompilationDTO.getEvents() == null ? new ArrayList<>()
                 : eventRepository.findAllByIdIn(newCompilationDTO.getEvents());
@@ -43,14 +43,14 @@ public class CompilationServiceImpl implements CompilationsService {
         events = eventService.fillWithEventViews(events);
         compilation.setEvents(new HashSet<>(events));
         CompilationDTO compilationDTO = compilationMapper.toCompilationDTO(compilationRepository.save(compilation));
-        log.info("Added new compilation {}", compilationDTO);
+        log.debug("Added new compilation {}", compilationDTO);
         return compilationDTO;
     }
 
     @Override
     @Transactional
     public void deleteCompilation(Long compId) {
-        log.info("Deleting compilation ID{}", compId);
+        log.debug("Deleting compilation ID{}", compId);
         getCompilationIfExist(compId);
         compilationRepository.deleteById(compId);
     }
@@ -58,7 +58,7 @@ public class CompilationServiceImpl implements CompilationsService {
     @Override
     @Transactional
     public CompilationDTO updateCompilation(UpdateCompilationDTO updateCompilationDTO, Long compId) {
-        log.info("Updating compilation ID{}", compId);
+        log.debug("Updating compilation ID{}", compId);
         Compilation compilation = getCompilationIfExist(compId);
         if (updateCompilationDTO.getEvents() != null) {
             HashSet<Event> events = new HashSet<>(eventRepository.findAllByIdIn(updateCompilationDTO.getEvents()));
@@ -73,20 +73,19 @@ public class CompilationServiceImpl implements CompilationsService {
     @Override
     @Transactional(readOnly = true)
     public CompilationDTO getCompilation(Long compId) {
-        log.info("Getting compilation ID{}", compId);
+        log.debug("Getting compilation ID{}", compId);
         return compilationMapper.toCompilationDTO(getCompilationIfExist(compId));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<CompilationDTO> getCompilations(Boolean pined, PageRequest pageRequest) {
-        log.info("Getting compilations");
+        log.debug("Getting compilations");
         return (pined == null) ? compilationMapper.toCompilationDTO(compilationRepository.findAll(pageRequest).toList())
                 : compilationMapper.toCompilationDTO(compilationRepository.findAllByPinned(pined, pageRequest).toList());
 
     }
 
-    @Transactional(readOnly = true)
     private Compilation getCompilationIfExist(Long compId) {
         return compilationRepository.findById(compId).orElseThrow(() ->
                 new NotFoundException(String.format(COMPILATION_NOT_FOUND, compId)));

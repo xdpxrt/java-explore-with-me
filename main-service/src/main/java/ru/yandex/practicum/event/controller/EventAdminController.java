@@ -5,10 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.event.dto.AdminUpdateEventDTO;
 import ru.yandex.practicum.event.dto.FullEventDTO;
+import ru.yandex.practicum.event.dto.UpdateEventDTO;
 import ru.yandex.practicum.event.service.EventService;
-import ru.yandex.practicum.event.state.EventState;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -17,8 +16,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static ru.yandex.practicum.util.Constants.*;
-import static ru.yandex.practicum.util.Utilities.fromSizePage;
 import static ru.yandex.practicum.util.Utilities.checkEventStart;
+import static ru.yandex.practicum.util.Utilities.fromSizePage;
 
 @Slf4j
 @Validated
@@ -44,10 +43,10 @@ public class EventAdminController {
     }
 
     @PatchMapping(EVENT_ID_URI)
-    public FullEventDTO updateEventByAdmin(@RequestBody @Valid AdminUpdateEventDTO adminUpdateEventDTO,
+    public FullEventDTO updateEventByAdmin(@RequestBody @Valid UpdateEventDTO updateEventDTO,
                                            @PathVariable Long eventId) {
         log.info("Response from PATCH request on {}", EVENTS_ADMIN_URI + EVENT_ID_URI);
-        if (adminUpdateEventDTO.getEventDate() != null) checkEventStart(adminUpdateEventDTO.getEventDate());
-        return eventService.updateEventByAdmin(adminUpdateEventDTO, eventId);
+        if (updateEventDTO.getEventDate() != null) checkEventStart(updateEventDTO.getEventDate());
+        return eventService.updateEventByAdmin(updateEventDTO, eventId);
     }
 }

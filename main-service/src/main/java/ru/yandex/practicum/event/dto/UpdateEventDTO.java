@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.yandex.practicum.event.location.dto.LocationDTO;
+import ru.yandex.practicum.util.Constants;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Future;
@@ -19,7 +20,7 @@ import static ru.yandex.practicum.util.Constants.DATE_FORMAT;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BaseUpdateEventDTO {
+public class UpdateEventDTO {
     @Size(min = 20, max = 2000)
     private String annotation;
     private Long category;
@@ -36,4 +37,5 @@ public class BaseUpdateEventDTO {
     private Boolean requestModeration;
     @Size(min = 3, max = 120)
     private String title;
+    private Constants.EventStatus stateAction;
 }

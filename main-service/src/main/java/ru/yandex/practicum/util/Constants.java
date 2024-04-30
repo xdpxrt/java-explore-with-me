@@ -14,10 +14,36 @@ public class Constants {
     public static final String COMPILATION_NOT_FOUND = "Compilation ID%d not found";
     public static final String EVENTS_ADMIN_URI = "/admin/events";
     public static final String EVENT_ID_URI = "/{eventId}";
+    public static final String EVENT_ID_REQUESTS_URI = "/{eventId}/requests";
     public static final String EVENTS_PRIVATE_URI = "/users/{userId}/events";
     public static final String EVENTS_PUBLIC_URI = "/events";
     public static final String EVENT_NOT_FOUND = "Event ID%d not found";
     public static final String REQUESTS_PRIVATE_URI = "/users/{userId}/requests";
     public static final String USERS_ADMIN_URI = "/admin/users";
     public static final String USER_NOT_FOUND = "User ID%d not found";
+
+    public enum EventStatus {
+        PUBLISH_EVENT,
+        REJECT_EVENT,
+        SEND_TO_REVIEW,
+        CANCEL_REVIEW
+    }
+
+    public enum EventSort {
+        EVENT_DATE,
+        VIEWS
+    }
+
+    public enum EventState {
+        PENDING,
+        PUBLISHED,
+        CANCELED
+    }
+
+    public enum RequestStatus {
+        PENDING,
+        CONFIRMED,
+        REJECTED,
+        CANCELED
+    }
 }

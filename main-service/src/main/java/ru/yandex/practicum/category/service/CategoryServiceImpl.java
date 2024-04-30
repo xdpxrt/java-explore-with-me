@@ -26,36 +26,36 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public CategoryDTO addCategory(NewCategoryDTO newCategoryDTO) {
-        log.info("Adding category {}", newCategoryDTO);
+        log.debug("Adding category {}", newCategoryDTO);
         Category category = categoryRepository.save(categoryMapper.toCategory(newCategoryDTO));
-        log.info("Category is added {}", category);
+        log.debug("Category is added {}", category);
         return categoryMapper.toCategoryDTO(category);
     }
 
     @Override
     @Transactional
     public void deleteCategory(Long catId) {
-        log.info("Deleting category ID{}", catId);
+        log.debug("Deleting category ID{}", catId);
         getCategoryIfExist(catId);
         categoryRepository.deleteById(catId);
-        log.info("Category ID{} is deleted", catId);
+        log.debug("Category ID{} is deleted", catId);
     }
 
     @Override
     @Transactional
     public CategoryDTO updateCategory(Long catId, NewCategoryDTO newCategoryDTO) {
-        log.info("Updating category ID{}", catId);
+        log.debug("Updating category ID{}", catId);
         Category category = getCategoryIfExist(catId);
         category.setName(newCategoryDTO.getName());
         Category updatedCategory = categoryRepository.save(category);
-        log.info("Category is updated {}", category);
+        log.debug("Category is updated {}", category);
         return categoryMapper.toCategoryDTO(updatedCategory);
     }
 
     @Override
     @Transactional(readOnly = true)
     public CategoryDTO getCategory(Long catId) {
-        log.info("Getting category ID{}", catId);
+        log.debug("Getting category ID{}", catId);
         Category category = getCategoryIfExist(catId);
         return categoryMapper.toCategoryDTO(category);
     }
@@ -63,7 +63,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional(readOnly = true)
     public List<CategoryDTO> getAllCategories(PageRequest pageRequest) {
-        log.info("Getting list of categories");
+        log.debug("Getting list of categories");
         return categoryMapper.toCategoryDTO(categoryRepository.findAll(pageRequest).toList());
     }
 

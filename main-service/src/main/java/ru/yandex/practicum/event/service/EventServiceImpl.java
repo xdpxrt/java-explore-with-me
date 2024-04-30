@@ -13,15 +13,16 @@ import ru.yandex.practicum.dto.EndpointHit;
 import ru.yandex.practicum.dto.ViewStats;
 import ru.yandex.practicum.error.exception.ConflictException;
 import ru.yandex.practicum.error.exception.NotFoundException;
-import ru.yandex.practicum.event.dto.*;
+import ru.yandex.practicum.event.dto.FullEventDTO;
+import ru.yandex.practicum.event.dto.NewEventDTO;
+import ru.yandex.practicum.event.dto.ShortEventDTO;
+import ru.yandex.practicum.event.dto.UpdateEventDTO;
 import ru.yandex.practicum.event.location.mapper.LocationMapper;
 import ru.yandex.practicum.event.location.model.Location;
 import ru.yandex.practicum.event.location.repository.LocationRepository;
 import ru.yandex.practicum.event.mapper.EventMapper;
 import ru.yandex.practicum.event.model.Event;
 import ru.yandex.practicum.event.repository.EventRepository;
-import ru.yandex.practicum.event.state.EventSort;
-import ru.yandex.practicum.event.state.EventState;
 import ru.yandex.practicum.request.dto.RequestDTO;
 import ru.yandex.practicum.request.dto.RequestResultDTO;
 import ru.yandex.practicum.request.dto.RequestUpdateDTO;
@@ -36,10 +37,10 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static ru.yandex.practicum.event.state.EventState.*;
-import static ru.yandex.practicum.request.status.RequestStatus.CONFIRMED;
-import static ru.yandex.practicum.request.status.RequestStatus.REJECTED;
 import static ru.yandex.practicum.util.Constants.*;
+import static ru.yandex.practicum.util.Constants.EventState.*;
+import static ru.yandex.practicum.util.Constants.RequestStatus.CONFIRMED;
+import static ru.yandex.practicum.util.Constants.RequestStatus.REJECTED;
 
 @Slf4j
 @Service
@@ -60,7 +61,7 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional
     public FullEventDTO addEvent(NewEventDTO newEventDTO, Long userId) {
-        log.info("Adding event {}", newEventDTO);
+        log.debug("Adding event {}", newEventDTO);
         User owner = getUser(userId);
         Category category = getCategory(newEventDTO.getCategory());
         Event newEvent = eventMapper.toEvent(newEventDTO, category);
@@ -72,14 +73,14 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.save(newEvent);
         event.setViews(0L);
         event.setConfirmedRequests(0L);
-        log.info("Event is added {}", event);
+        log.debug("Event is added {}", event);
         return eventMapper.toFullEventDTO(event);
     }
 
     @Override
     @Transactional(readOnly = true)
     public FullEventDTO getEvent(Long userId, Long eventId) {
-        log.info("Getting event ID{} by user ID{}", eventId, userId);
+        log.debug("Getting event ID{} by user ID{}", eventId, userId);
         getUser(userId);
         Event event = getEvent(eventId);
         event = fillWithEventViews(List.of(event)).get(0);
@@ -90,7 +91,7 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional(readOnly = true)
     public List<ShortEventDTO> getAllEvents(Long userId, PageRequest pageRequest) {
-        log.info("Getting events by user ID{}", userId);
+        log.debug("Getting events by user ID{}", userId);
         getUser(userId);
         List<Event> events = eventRepository.findAllByInitiatorId(userId, pageRequest);
         events = fillWithEventViews(events);
@@ -99,22 +100,25 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public FullEventDTO updateEvent(UserUpdateEventDTO userUpdateEventDTO, Long userId, Long eventId) {
-        log.info("Updating event ID{}", eventId);
+    @Transactional
+    public FullEventDTO updateEvent(UpdateEventDTO updateEventDTO, Long userId, Long eventId) {
+        log.debug("Updating event ID{}", eventId);
         getUser(userId);
         Event event = getEvent(eventId);
         if (!event.getInitiator().getId().equals(userId)) {
             throw new ConflictException("Event can be changed only by owner");
         }
-        Event updatedEvent = checkEventForUpdate(event, userUpdateEventDTO);
-        if (userUpdateEventDTO.getStateAction() != null) {
-            switch (userUpdateEventDTO.getStateAction()) {
+        Event updatedEvent = checkEventForUpdate(event, updateEventDTO);
+        if (updateEventDTO.getStateAction() != null) {
+            switch (updateEventDTO.getStateAction()) {
                 case CANCEL_REVIEW:
                     updatedEvent.setState(CANCELED);
                     break;
                 case SEND_TO_REVIEW:
                     updatedEvent.setState(PENDING);
                     break;
+                default:
+                    throw new ConflictException("Wrong state action");
             }
         }
         event = eventRepository.save(updatedEvent);
@@ -126,15 +130,16 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional(readOnly = true)
     public List<RequestDTO> getRequestsByEventId(Long userId, Long eventId) {
-        log.info("Getting requests of event ID{}", eventId);
+        log.debug("Getting requests of event ID{}", eventId);
         getUser(userId);
         getEvent(eventId);
         return requestMapper.toRequestDTO(requestRepository.findAllByEventId(eventId));
     }
 
     @Override
+    @Transactional
     public RequestResultDTO updateRequestsStatus(RequestUpdateDTO requestUpdateDTO, Long userId, Long eventId) {
-        log.info("Updating requests {}", requestUpdateDTO.getRequestIds());
+        log.debug("Updating requests {}", requestUpdateDTO.getRequestIds());
         getUser(userId);
         Event event = getEvent(eventId);
         if (!event.getRequestModeration() || event.getParticipantLimit() == 0)
@@ -176,7 +181,7 @@ public class EventServiceImpl implements EventService {
     public List<FullEventDTO> getEventsByAdmin(List<Long> usersIds, List<EventState> states,
                                                List<Long> categoriesIds, LocalDateTime start, LocalDateTime end,
                                                PageRequest pageRequest) {
-        log.info("Getting events by admin");
+        log.debug("Getting events by admin");
         List<Specification<Event>> specifications = new ArrayList<>();
         specifications.add(states.isEmpty() ? null : stateIn(states));
         specifications.add(usersIds.isEmpty() ? null : userIdIn(usersIds));
@@ -198,12 +203,13 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public FullEventDTO updateEventByAdmin(AdminUpdateEventDTO adminUpdateEventDTO, Long eventId) {
-        log.info(String.format("Updating event ID%d by admin", eventId));
-        Event event = checkEventForUpdate(getEvent(eventId), adminUpdateEventDTO);
+    @Transactional
+    public FullEventDTO updateEventByAdmin(UpdateEventDTO updateEventDTO, Long eventId) {
+        log.debug(String.format("Updating event ID%d by admin", eventId));
+        Event event = checkEventForUpdate(getEvent(eventId), updateEventDTO);
         if (event.getState().equals(CANCELED)) throw new ConflictException("Not possible to update canceled event");
-        if (adminUpdateEventDTO.getStateAction() != null) {
-            switch (adminUpdateEventDTO.getStateAction()) {
+        if (updateEventDTO.getStateAction() != null) {
+            switch (updateEventDTO.getStateAction()) {
                 case REJECT_EVENT:
                     event.setState(CANCELED);
                     break;
@@ -211,12 +217,14 @@ public class EventServiceImpl implements EventService {
                     event.setPublishedOn(LocalDateTime.now());
                     event.setState(PUBLISHED);
                     break;
+                default:
+                    throw new ConflictException("Wrong state action");
             }
         }
         Event updatedEvent = eventRepository.save(event);
         event.setViews(0L);
         event.setConfirmedRequests(0L);
-        log.info(String.format("Event ID%d updated  by admin %s", eventId, updatedEvent));
+        log.debug(String.format("Event ID%d updated  by admin %s", eventId, updatedEvent));
         return eventMapper.toFullEventDTO(updatedEvent);
     }
 
@@ -226,7 +234,7 @@ public class EventServiceImpl implements EventService {
                                                   LocalDateTime start, LocalDateTime end,
                                                   Boolean onlyAvailable, EventSort sort, PageRequest pageRequest,
                                                   HttpServletRequest request) {
-        log.info("Getting published events by parameters");
+        log.debug("Getting published events by parameters");
         addStats(request);
         List<Specification<Event>> specifications = new ArrayList<>();
         specifications.add(stateIn(List.of(PUBLISHED)));
@@ -269,7 +277,7 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional(readOnly = true)
     public FullEventDTO getPublishedEventById(Long id, HttpServletRequest request) {
-        log.info("Getting published event ID{}", id);
+        log.debug("Getting published event ID{}", id);
         Event event = getEvent(id);
         if (!event.getState().equals(PUBLISHED))
             throw new NotFoundException(String.format("Event ID%d is not published yet", id));
@@ -330,39 +338,39 @@ public class EventServiceImpl implements EventService {
                 .collect(Collectors.toList());
     }
 
-    private Event checkEventForUpdate(Event event, BaseUpdateEventDTO baseUpdateEventDTO) {
+    private Event checkEventForUpdate(Event event, UpdateEventDTO updateEventDTO) {
         if (event.getState().equals(PUBLISHED))
             throw new ConflictException("Published events cannot be changed");
-        if (baseUpdateEventDTO.getAnnotation() != null && !baseUpdateEventDTO.getAnnotation()
+        if (updateEventDTO.getAnnotation() != null && !updateEventDTO.getAnnotation()
                 .equals(event.getAnnotation())) {
-            event.setAnnotation(baseUpdateEventDTO.getAnnotation());
+            event.setAnnotation(updateEventDTO.getAnnotation());
         }
-        if (baseUpdateEventDTO.getCategory() != null && !baseUpdateEventDTO.getCategory()
+        if (updateEventDTO.getCategory() != null && !updateEventDTO.getCategory()
                 .equals(event.getCategory().getId())) {
-            event.setCategory(getCategory(baseUpdateEventDTO.getCategory()));
+            event.setCategory(getCategory(updateEventDTO.getCategory()));
         }
-        if (baseUpdateEventDTO.getDescription() != null && !baseUpdateEventDTO.getDescription()
+        if (updateEventDTO.getDescription() != null && !updateEventDTO.getDescription()
                 .equals(event.getDescription())) {
-            event.setDescription(baseUpdateEventDTO.getDescription());
+            event.setDescription(updateEventDTO.getDescription());
         }
-        if (baseUpdateEventDTO.getEventDate() != null && !baseUpdateEventDTO.getEventDate()
+        if (updateEventDTO.getEventDate() != null && !updateEventDTO.getEventDate()
                 .equals(event.getEventDate())) {
-            event.setEventDate(baseUpdateEventDTO.getEventDate());
+            event.setEventDate(updateEventDTO.getEventDate());
         }
-        if (baseUpdateEventDTO.getLocation() != null) {
-            event.setLocation(locationRepository.save(locationMapper.toLocation(baseUpdateEventDTO.getLocation())));
+        if (updateEventDTO.getLocation() != null) {
+            event.setLocation(locationRepository.save(locationMapper.toLocation(updateEventDTO.getLocation())));
         }
-        if (baseUpdateEventDTO.getPaid() != null && !baseUpdateEventDTO.getPaid().equals(event.getPaid())) {
-            event.setPaid(baseUpdateEventDTO.getPaid());
+        if (updateEventDTO.getPaid() != null && !updateEventDTO.getPaid().equals(event.getPaid())) {
+            event.setPaid(updateEventDTO.getPaid());
         }
-        if (baseUpdateEventDTO.getParticipantLimit() != null) {
-            event.setParticipantLimit(baseUpdateEventDTO.getParticipantLimit());
+        if (updateEventDTO.getParticipantLimit() != null) {
+            event.setParticipantLimit(updateEventDTO.getParticipantLimit());
         }
-        if (baseUpdateEventDTO.getRequestModeration() != null) {
-            event.setRequestModeration(baseUpdateEventDTO.getRequestModeration());
+        if (updateEventDTO.getRequestModeration() != null) {
+            event.setRequestModeration(updateEventDTO.getRequestModeration());
         }
-        if (baseUpdateEventDTO.getTitle() != null && !baseUpdateEventDTO.getTitle().equals(event.getTitle())) {
-            event.setTitle(baseUpdateEventDTO.getTitle());
+        if (updateEventDTO.getTitle() != null && !updateEventDTO.getTitle().equals(event.getTitle())) {
+            event.setTitle(updateEventDTO.getTitle());
         }
         return event;
     }
