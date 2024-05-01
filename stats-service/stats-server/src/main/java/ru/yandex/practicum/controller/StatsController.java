@@ -34,10 +34,10 @@ public class StatsController {
     public List<ViewStats> getStats(
             @RequestParam @DateTimeFormat(pattern = DATE_FORMAT) LocalDateTime start,
             @RequestParam @DateTimeFormat(pattern = DATE_FORMAT) LocalDateTime end,
-            @RequestParam(required = false) List<String> uris,
+            @RequestParam(defaultValue = "") String[] uris,
             @RequestParam(defaultValue = "false") boolean unique) {
         log.info("Response from GET request on /stats");
         if (start.isAfter(end)) throw new ValidationException(END_BEFORE_START);
-        return service.getStats(start, end, uris, unique);
+        return service.getStats(start, end, List.of(uris), unique);
     }
 }

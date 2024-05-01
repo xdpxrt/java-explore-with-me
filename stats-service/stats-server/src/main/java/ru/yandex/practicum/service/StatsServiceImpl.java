@@ -31,7 +31,7 @@ public class StatsServiceImpl implements StatsService {
     @Override
     @Transactional(readOnly = true)
     public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
-        if (uris == null) {
+        if (uris.isEmpty()) {
             if (unique) {
                 log.info("getStats uris empty, unique = true");
                 return statsRepository.findAllStatsUniqueIp(start, end);
@@ -42,10 +42,10 @@ public class StatsServiceImpl implements StatsService {
         } else {
             if (unique) {
                 log.info("getStats uris not empty, unique = true");
-                return statsRepository.findAllStatsUniqueIpUrisIn(start, end, uris);
+                return statsRepository.findAllStatsUniqueIpUrisIn(uris.get(0), start, end);
             } else {
                 log.info("getStats uris not empty, unique = false");
-                return statsRepository.findAllStatsUrisIn(start, end, uris);
+                return statsRepository.findAllStatsUrisIn(uris, start, end);
             }
         }
     }
