@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import ru.yandex.practicum.category.dto.CategoryDTO;
 import ru.yandex.practicum.event.location.dto.LocationDTO;
-import ru.yandex.practicum.user.dto.UserShortDTO;
+import ru.yandex.practicum.user.dto.ShortUserDTO;
 
 import java.time.LocalDateTime;
 
@@ -24,7 +24,7 @@ public class ShortEventDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
     private LocalDateTime eventDate;
     private Long id;
-    private UserShortDTO initiator;
+    private ShortUserDTO initiator;
     private LocationDTO location;
     private String title;
     private Long views;
