@@ -48,6 +48,7 @@ public class CommentServiceImpl implements CommentService {
                 .author(user)
                 .event(event)
                 .createdOn(LocalDateTime.now())
+                .updatedOn(null)
                 .build();
         FullCommentDTO fullCommentDTO = commentMapper.toFullCommentDTO(commentRepository.save(comment));
         log.debug("Comment added {}", fullCommentDTO);

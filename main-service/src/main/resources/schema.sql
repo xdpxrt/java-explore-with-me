@@ -56,5 +56,5 @@ CREATE TABLE IF NOT EXISTS comments(
     author_id BIGINT REFERENCES users(id) NOT NULL,
     event_id BIGINT REFERENCES events(id) NOT NULL,
     created_on TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    updated_on TIMESTAMP WITHOUT TIME ZONE NOT NULL
+    updated_on TIMESTAMP WITHOUT TIME ZONE
     );
