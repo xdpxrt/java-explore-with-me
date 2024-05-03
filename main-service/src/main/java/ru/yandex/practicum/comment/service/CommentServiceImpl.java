@@ -39,8 +39,7 @@ public class CommentServiceImpl implements CommentService {
     public FullCommentDTO addComment(NewCommentDTO newCommentDTO, Long userId, Long eventId) {
         log.debug("Adding comment to event ID{} from user ID{} {}", eventId, userId, newCommentDTO);
         User user = getUserIfExist(userId);
-        Event event = eventRepository.findById(eventId).orElseThrow(() ->
-                new NotFoundException(String.format(EVENT_NOT_FOUND, eventId)));
+        Event event = getEventIfExist(eventId);
         if (!PUBLISHED.equals(event.getState()))
             throw new ConflictException("Only to published events you can add comment");
         Comment comment = Comment.builder()
@@ -111,8 +110,8 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public List<ShortCommentDTO> getCommentsByEventId(Long eventId, PageRequest pageRequest) {
-        log.debug("Getting list of comments of user ID{}", eventId);
-        getUserIfExist(eventId);
+        log.debug("Getting list of comments of event ID{}", eventId);
+        getEventIfExist(eventId);
         List<Comment> comments = commentRepository.findAllByEventId(eventId, pageRequest);
         return commentMapper.toShortCommentDTO(comments);
     }
@@ -120,6 +119,11 @@ public class CommentServiceImpl implements CommentService {
     private User getUserIfExist(Long userId) {
         return userRepository.findById(userId).orElseThrow(() ->
                 new NotFoundException(String.format(USER_NOT_FOUND, userId)));
+    }
+
+    private Event getEventIfExist(Long eventId) {
+        return eventRepository.findById(eventId).orElseThrow(() ->
+                new NotFoundException(String.format(EVENT_NOT_FOUND, eventId)));
     }
 
     private Comment getCommentIfExist(Long commId) {
