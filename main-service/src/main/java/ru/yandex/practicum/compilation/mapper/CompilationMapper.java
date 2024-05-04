@@ -14,6 +14,7 @@ import java.util.List;
 @DecoratedWith(CompilationMapperDecorator.class)
 public interface CompilationMapper {
     @Mapping(target = "events", ignore = true)
+    @Mapping(target = "id", ignore = true)
     Compilation toCompilation(NewCompilationDTO newCompilationDTO);
 
     CompilationDTO toCompilationDTO(Compilation compilation);
