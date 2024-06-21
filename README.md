@@ -17,6 +17,7 @@ main-service (all buisness logic)
     - leave comments
   - admins:
     - manage categories and compilations of events
-    - moderate events <br>
+    - moderate events
+    
 stats-service (to store statistics of events)
   -  collect information about the number of requests to the event
